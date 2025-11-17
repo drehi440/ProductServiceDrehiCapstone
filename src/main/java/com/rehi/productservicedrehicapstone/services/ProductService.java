@@ -11,4 +11,6 @@ public interface ProductService
     List<Product> getAllProducts();
     Product createProduct(String name, String description, double price,
                           String imageUrl, String category);
+    Product updateProduct(long id, String name, String description, double price,
+                          String imageUrl, String category) throws ProductNotFoundException;
 }

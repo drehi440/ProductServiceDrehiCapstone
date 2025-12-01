@@ -8,6 +8,7 @@ import com.rehi.productservicedrehicapstone.models.Product;
 
 
 import com.rehi.productservicedrehicapstone.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,8 @@ public class ProductController
 
     ProductService productService;
 
-    public ProductController(ProductService productService)
+    public ProductController(@Qualifier("productDBService") 
+                                ProductService productService)
     {
         this.productService = productService;
     }

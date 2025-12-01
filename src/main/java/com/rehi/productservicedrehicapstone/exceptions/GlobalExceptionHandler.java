@@ -1,30 +1,42 @@
 package com.rehi.productservicedrehicapstone.exceptions;
 
 import com.rehi.productservicedrehicapstone.dtos.ErrorDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler
 {
     @ExceptionHandler(NullPointerException.class)
-    public ErrorDto handleNullPointerExceptions()
+    public ResponseEntity<ErrorDto> handleNullPointerExceptions()
     {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setStatus("Failure");
         errorDto.setMessage("NullPointer exception occurred");
 
-        return errorDto;
+        ResponseEntity<ErrorDto> responseEntity = 
+        new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        return responseEntity;
+
+        //  return errorDto;
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorDto handleProductNotFoundException(
+    public ResponseEntity<ErrorDto> handleProductNotFoundException(
             ProductNotFoundException productNotFoundException)
     {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setStatus("Failure");
         errorDto.setMessage(productNotFoundException.getMessage());
 
-        return errorDto;
+        // return errorDto;
+        ResponseEntity<ErrorDto> responseEntity = 
+        new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+        return responseEntity;
     }
 }

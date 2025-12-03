@@ -33,6 +33,17 @@ This section provides ready-to-use examples for registering a user, logging in, 
 
 > Replace `localhost:8080` if your server is running on a different host or port.
 
+
+## 0. Design Decisions
+
+Here is a quick look at why I chose specific technologies for this architecture:
+
+* **Redis for JWT Logout:** Since JWTs are stateless, you can't technically "revoke" them before they expire. To handle secure logouts, I used Redis as a high-speed "deny-list." When a user logs out, their token is saved to Redis with a Time-To-Live (TTL) matching the token's remaining validity. This is much faster than checking a SQL database on every request, and the automatic expiration means I don't have to write manual cleanup jobs.
+
+* **Spring AI for Profile Bios:** I wanted to add a modern touch to the user experience without overcomplicating the stack. Spring AI allowed me to integrate OpenAI directly into the Java backend, abstracting away the raw REST calls. It allows users to input simple interests and get a creative, AI-generated bio instantly, keeping the codebase clean and Java-centric.
+
+* **AWS EC2 + Docker Compose:** Because this system has several moving parts (Kafka, Zookeeper, Redis, MySQL, and the App itself), configuring them manually on a server would be error-prone and tedious. I chose Docker Compose on an EC2 instance as the pragmatic deployment strategy. It gives me container isolation and a simple "one-command" startup for the whole stack, avoiding the overhead and cost of a full Kubernetes cluster for this scale.
+
 ### 1. Register a New User
 
 **Endpoint:** `POST /api/auth/register`  

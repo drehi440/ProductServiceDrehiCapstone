@@ -40,6 +40,19 @@ public class GlobalExceptionHandler
         return responseEntity;
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleResourceNotFoundException(
+            ResourceNotFoundException resourceNotFoundException)
+    {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setStatus("Failure");
+        errorDto.setMessage(resourceNotFoundException.getMessage());
+
+        ResponseEntity<ErrorDto> responseEntity =
+                new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+        return responseEntity;
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorDto> handleUserNotFoundException(
             UserNotFoundException userNotFoundException)

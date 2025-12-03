@@ -192,3 +192,76 @@ curl -X GET "http://localhost:8080/api/products?page=0&size=5"
 
 You can adjust the `page` and `size` parameters to implement infinite scrolling or traditional paged views in the frontend.
 
+
+## Cart & Checkout Flow
+
+The cart and checkout module allows a user to add products to a cart, review the cart total, and place an order.
+These examples assume you already have:
+
+- At least one `product` row (see **Product Catalog API** seeding).
+- A valid `userId` (e.g. `1` from the User Management module).
+
+> Replace `localhost:8080` with your actual host/port if needed.
+
+### 1. Add Item to Cart
+
+**Endpoint:** `POST /api/carts/{userId}/items`  
+**Description:** Adds a product to the user’s cart or updates the quantity if it already exists. Ensure the Bearer Token is added to the request
+
+```bash
+curl -X POST "http://localhost:8080/api/carts/1/items" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "productId": 1,
+    "quantity": 2
+  }'
+```
+
+The response contains the `CartDto` with `cartId`, `totalPrice`, and the list of `cartItems`.
+
+### 2. View Cart
+
+**Endpoint:** `GET /api/carts/{userId}`  
+**Description:** Retrieves the current contents of the user’s cart including the computed `totalPrice`.
+
+```bash
+curl -X GET "http://localhost:8080/api/carts/1"
+```
+
+Verify that the `totalPrice` matches the sum of `productPrice * quantity` for each `cartItem`.
+
+### 3. Checkout (Place Order)
+
+**Endpoint:** `POST /api/orders/checkout`  
+**Description:** Converts the user’s cart into an order and creates a mock payment with status `"SUCCESS"`.
+
+```bash
+curl -X POST "http://localhost:8080/api/orders/checkout" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": 1,
+    "paymentMethod": "UPI",
+    "addressId": 5
+  }'
+```
+
+The response includes `orderId`, `status` (e.g. `"COMPLETED"`), `totalAmount`, `orderItems`, and `paymentDetails`.
+
+### 4. Verify Cart is Empty After Checkout
+
+After a successful checkout, the user’s cart items are cleared and `totalPrice` reset to `0.0`.
+
+```bash
+curl -X GET "http://localhost:8080/api/carts/1"
+```
+
+You should see an empty `cartItems` array and `totalPrice` equal to `0.0`.  
+Alternatively, you can run a SQL query against MySQL:
+
+```sql
+SELECT * FROM cart_item;
+```
+
+After checkout, there should be no rows for the user’s cart.
+

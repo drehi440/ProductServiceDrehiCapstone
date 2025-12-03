@@ -28,7 +28,7 @@ public class ProductDBService implements ProductService
     @Override
     public Product getProductById(long id) throws ProductNotFoundException
     {
-        Optional<Product> optionalProduct = productRepository.findById(id);
+        Optional<Product> optionalProduct = productRepository.findByIdAndIsDeletedFalse(id);
 
         if(optionalProduct.isEmpty())
         {
@@ -41,7 +41,27 @@ public class ProductDBService implements ProductService
     @Override
     public List<Product> getAllProducts()
     {
-        return productRepository.findAll();
+        return productRepository.findByIsDeletedFalse();
+    }
+
+    public List<Product> searchProductsByName(String name)
+    {
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Product> getProductsByPriceRange(double minPrice, double maxPrice)
+    {
+        return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    public List<Product> getProductsByCategoryName(String categoryName)
+    {
+        return productRepository.findByCategory_NameIgnoreCase(categoryName);
+    }
+
+    public List<Product> getActiveProducts()
+    {
+        return productRepository.findByIsDeletedFalse();
     }
 
     @Override
@@ -81,6 +101,21 @@ public class ProductDBService implements ProductService
         product.setCategory(categoryObj);
 
         return productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(long id) throws ProductNotFoundException
+    {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if(optionalProduct.isEmpty())
+        {
+            throw new ProductNotFoundException("Product with id " + id + " not found");
+        }
+
+        Product product = optionalProduct.get();
+        product.setDeleted(true);
+        productRepository.save(product);
     }
 
     private Category getCategoryFromDB(String name)

@@ -5,8 +5,7 @@ import com.rehi.productservicedrehicapstone.dtos.CreateFakeStoreProductDto;
 import com.rehi.productservicedrehicapstone.dtos.ProductResponseDto;
 import com.rehi.productservicedrehicapstone.exceptions.ProductNotFoundException;
 import com.rehi.productservicedrehicapstone.models.Product;
-
-
+import com.rehi.productservicedrehicapstone.services.ProductDBService;
 import com.rehi.productservicedrehicapstone.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,18 +14,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ProductController
 {
 
     ProductService productService;
+    ProductDBService productDBService;
 
-    public ProductController(@Qualifier("productDBService") 
-                                ProductService productService)
+    public ProductController(@Qualifier("productDBService")
+                             ProductService productService,
+                             ProductDBService productDBService)
     {
         this.productService = productService;
+        this.productDBService = productDBService;
     }
 
     @GetMapping("/products/{id}")
@@ -51,6 +52,70 @@ public class ProductController
         // List<ProductResponseDto> productResponseDtos = products.stream()
         //     .map(ProductResponseDto::from)
         //     .collect(Collectors.toList());
+
+        for(Product product : products)
+        {
+            ProductResponseDto productResponseDto = ProductResponseDto.from(product);
+            productResponseDtos.add(productResponseDto);
+        }
+
+        return productResponseDtos;
+    }
+
+    @GetMapping("/products/search")
+    public List<ProductResponseDto> searchProductsByName(
+            @RequestParam("name") String name)
+    {
+        List<Product> products = productDBService.searchProductsByName(name);
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+
+        for(Product product : products)
+        {
+            ProductResponseDto productResponseDto = ProductResponseDto.from(product);
+            productResponseDtos.add(productResponseDto);
+        }
+
+        return productResponseDtos;
+    }
+
+    @GetMapping("/products/price-range")
+    public List<ProductResponseDto> getProductsByPriceRange(
+            @RequestParam("minPrice") double minPrice,
+            @RequestParam("maxPrice") double maxPrice)
+    {
+        List<Product> products = productDBService.getProductsByPriceRange(minPrice, maxPrice);
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+
+        for(Product product : products)
+        {
+            ProductResponseDto productResponseDto = ProductResponseDto.from(product);
+            productResponseDtos.add(productResponseDto);
+        }
+
+        return productResponseDtos;
+    }
+
+    @GetMapping("/products/by-category")
+    public List<ProductResponseDto> getProductsByCategory(
+            @RequestParam("categoryName") String categoryName)
+    {
+        List<Product> products = productDBService.getProductsByCategoryName(categoryName);
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+
+        for(Product product : products)
+        {
+            ProductResponseDto productResponseDto = ProductResponseDto.from(product);
+            productResponseDtos.add(productResponseDto);
+        }
+
+        return productResponseDtos;
+    }
+
+    @GetMapping("/products/active")
+    public List<ProductResponseDto> getActiveProducts()
+    {
+        List<Product> products = productDBService.getActiveProducts();
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
 
         for(Product product : products)
         {
@@ -95,6 +160,14 @@ public class ProductController
         ProductResponseDto productResponseDto = ProductResponseDto.from(product);
 
         return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProductById(@PathVariable("id") long id)
+            throws ProductNotFoundException
+    {
+        productService.deleteProduct(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

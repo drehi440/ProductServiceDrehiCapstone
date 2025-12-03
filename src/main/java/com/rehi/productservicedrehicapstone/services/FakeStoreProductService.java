@@ -119,4 +119,10 @@ public class FakeStoreProductService implements ProductService
 
         return fakeStoreProductDto.toProduct();
     }
+
+    @Override
+    public void deleteProduct(long id) throws ProductNotFoundException
+    {
+        restTemplate.delete("https://fakestoreapi.com/products/" + id);
+    }
 }

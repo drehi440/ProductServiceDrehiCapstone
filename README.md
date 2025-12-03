@@ -387,3 +387,99 @@ curl -X GET "http://localhost:8080/api/orders" \
 
 You should now receive a 401 Unauthorized response because the token has been blacklisted server-side.
 
+
+## AWS EC2 Deployment Guide
+
+This section describes how to deploy the full stack (app + infra) on an AWS EC2 instance using Docker and `docker-compose.prod.yml`.
+
+### Prerequisites
+
+- AWS account with access to EC2.
+- EC2 instance (t3.medium or larger recommended) running a recent Amazon Linux 2 or Ubuntu LTS.
+- Security Group allowing inbound traffic on ports 22 (SSH), 8080 (HTTP), 3306 (MySQL), 6379 (Redis), 9092 (Kafka), and 9200 (Elasticsearch) as needed.
+
+### 1. SSH into EC2
+
+From your local machine:
+
+```bash
+ssh -i /path/to/your-key.pem ec2-user@YOUR_EC2_PUBLIC_IP
+```
+
+(For Ubuntu images, use `ubuntu@YOUR_EC2_PUBLIC_IP` instead of `ec2-user`.)
+
+### 2. Install Docker & Docker Compose on EC2
+
+On Amazon Linux 2:
+
+```bash
+sudo yum update -y
+sudo yum install -y docker
+sudo service docker start
+sudo usermod -aG docker $USER
+exit
+```
+
+Re-connect via SSH, then install Docker Compose:
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/2.29.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose version
+```
+
+### 3. Copy docker-compose.prod.yml to the Server
+
+From your local machine:
+
+```bash
+scp -i /path/to/your-key.pem docker-compose.prod.yml ec2-user@YOUR_EC2_PUBLIC_IP:/home/ec2-user/
+```
+
+If you’ve built and pushed the `productservicedrehi-capstone:latest` image to a registry (e.g. ECR or Docker Hub),
+ensure the `app` service in `docker-compose.prod.yml` references that image.
+
+### 4. Configure Environment Variables on EC2
+
+On the EC2 instance, export the required environment variables before starting the stack:
+
+```bash
+export DB_PASS="your_db_password"
+export DB_ROOT_PASS="your_db_root_password"
+export OPENAI_API_KEY="your_openai_api_key"
+```
+
+You can add these to `~/.bash_profile` if you want them to persist across sessions.
+
+### 5. Start the Full Stack
+
+From the directory containing `docker-compose.prod.yml`:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+This will start the application, MySQL, Redis, Kafka/Zookeeper, and Elasticsearch on the shared `ecommerce-network`.
+
+### 6. AI Bio Endpoint Testing from EC2 or Local
+
+Once the stack is running and you have:
+
+- Registered/logged in a user and obtained a JWT token.
+- Seeded at least one product and completed an order flow (optional).
+
+You can call the AI-powered bio endpoint:
+
+```bash
+TOKEN="PASTE_JWT_TOKEN_HERE"
+
+curl -X POST "http://YOUR_EC2_PUBLIC_IP:8080/api/users/profile/ai-bio" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "interests": "travel, photography, sneakers, and smart home gadgets"
+  }'
+```
+
+The response will be a short, AI-generated bio string tailored to the provided interests.
+

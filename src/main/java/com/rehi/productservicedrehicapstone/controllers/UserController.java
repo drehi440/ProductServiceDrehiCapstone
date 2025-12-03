@@ -1,7 +1,9 @@
 package com.rehi.productservicedrehicapstone.controllers;
 
+import com.rehi.productservicedrehicapstone.dtos.UserBioRequestDto;
 import com.rehi.productservicedrehicapstone.dtos.UserProfileDto;
 import com.rehi.productservicedrehicapstone.services.UserService;
+import com.rehi.productservicedrehicapstone.services.ai.UserAiService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final UserAiService userAiService;
 
     @GetMapping("/profile")
     public ResponseEntity<UserProfileDto> getProfile(java.security.Principal principal) {
@@ -35,6 +38,16 @@ public class UserController {
         UserProfileDto updated = userService.updateCurrentUserProfile(email, profileDto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
-}
 
+    /**
+     * POST /api/users/profile/ai-bio
+     * Generates a short, AI-powered bio suggestion based on the user's interests.
+     */
+    @PostMapping("/profile/ai-bio")
+    public ResponseEntity<String> generateAiBio(@RequestBody UserBioRequestDto request) {
+        log.info("Generating AI bio for interests='{}'", request.getInterests());
+        String bio = userAiService.generateUserBio(request.getInterests());
+        return new ResponseEntity<>(bio, HttpStatus.OK);
+    }
+}
 

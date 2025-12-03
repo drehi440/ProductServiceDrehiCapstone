@@ -99,6 +99,12 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- Spring AI OpenAI integration for User Service helper bios -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- Redis starter for caching and JWT blacklist (e.g. user order cache, token blacklist). -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

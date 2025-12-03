@@ -1,0 +1,741 @@
+{
+	"info": {
+		"_postman_id": "621e49eb-d7ea-4560-9b4c-b6a3d63da529",
+		"name": "WoolfxScalerCapstone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35143557"
+	},
+	"item": [
+		{
+			"name": "USER MANAGEMENT",
+			"item": [
+				{
+					"name": "REGISTER NEW USER",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"d.r@gmail.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"D\",\n  \"lastName\": \"R\",\n  \"mobileNumber\": \"1234567890\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN WITH TOKEN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"d.r@gmail.com\",\n    \"password\": \"NewStrongPassword456\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ACCESS THE PROFILE WITH BEARER TOKEN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY0MjY5LCJleHAiOjE3NjQ3Njc4Njl9.dPQ0ify14nhNO8pPBpAC5VFW6ZiD8Xs9tKfIaUz8nDc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PROFILE WITH BEARER TOKEN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY0MjY5LCJleHAiOjE3NjQ3Njc4Njl9.dPQ0ify14nhNO8pPBpAC5VFW6ZiD8Xs9tKfIaUz8nDc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 1,\n    \"firstName\": \"Deep\",\n    \"lastName\": \"Rehi\",\n    \"mobileNumber\": \"9876543210\",\n    \"email\": \"deep.rehi@example.com\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "REST PASSWORD USING BEARER TOKEN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY0MjY5LCJleHAiOjE3NjQ3Njc4Njl9.dPQ0ify14nhNO8pPBpAC5VFW6ZiD8Xs9tKfIaUz8nDc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"Password123!\",\n    \"newPassword\": \"NewStrongPassword456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/reset-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PRODUCT MANAGEMENT",
+			"item": [
+				{
+					"name": "SEARCH PRODUCT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products?keyword=phone&page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "phone"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL PRODUCTS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PRODUCT BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BROWSE PRODUCT BY CATEGORY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/categories/1/products?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories",
+								"1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CART MANAGEMENT",
+			"item": [
+				{
+					"name": "ADD ITEM TO CART",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": 20,\n    \"quantity\": 1\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carts/1/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"1",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VIEW CART",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CHECKOUT (PLACE ORDER)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 1,\n    \"paymentMethod\": \"UPI\",\n    \"addressId\": 5\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/orders/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"orders",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ORDER MANAGEMENT",
+			"item": [
+				{
+					"name": "VIEW ORDER HISTORY OF USER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/1/orders?page=0&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PAGINATION TEST",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/1/orders?page=1&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRACK SPECIFIC ORDER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkLnJAZ21haWwuY29tIiwiaWF0IjoxNzY0NzY3NDcwLCJleHAiOjE3NjQ3NzEwNzB9.55oaETJQHCAcVd71A_z3m9wmaglRwaCM_ik-Zvj6TQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/orders/1/track",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"orders",
+								"1",
+								"track"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CLASS EXAMPLES",
+			"item": [
+				{
+					"name": "CREATE PRODUCT",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"name\": \"Samsung Galaxy Z Fold 6\",\n      \"description\": \"Latest model\",\n      \"category\": \"electronics\",\n      \"price\": 1999.99,\n      \"imageUrl\": \"https://example.com/galaxyzfold6.png\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/products",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UDPATE PRODUCT BY ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Samsung Galaxy Z Fold 5\",\n    \"description\": \"Previous model\",\n    \"imageUrl\": \"https://example.com/galaxyzfold5.png\",\n    \"price\": 999.99,\n    \"category\": \"electronics\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PRODUCTS IN PRICE RANGE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products/price-range?minPrice=1999&maxPrice=5000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"price-range"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "1999"
+								},
+								{
+									"key": "maxPrice",
+									"value": "5000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND PRODUCT BY CATEGORY NAME (CASE INSENSITIVE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products/by-category?categoryName=electronics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"by-category"
+							],
+							"query": [
+								{
+									"key": "categoryName",
+									"value": "electronics"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SEARCH PRODUCT BY (PARTIAL/CASE INSENSITIVE) NAME",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products/search?name=fold",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "fold"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PRODUCT BY ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PAYMENT TESTING",
+			"item": []
+		}
+	]
+}

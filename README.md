@@ -1,3 +1,31 @@
+## Architecture (Mermaid)
+
+```mermaid
+flowchart LR
+
+  Client[Web/Mobile] --> Gateway[API Gateway]
+
+  Gateway --> Product[Product Service]
+
+  Gateway --> User[User Service]
+
+  Gateway --> Payment[Payment Service]
+
+  Product --> Redis[(Redis Cache)]
+
+  Product --> Kafka
+
+  User --> Kafka
+
+  Kafka --> Email[Email Service]
+
+  Product --> AI[Spring AI / OpenAI]
+
+  classDef svc fill:#000,stroke:#333,stroke-width:1px;
+
+  class Product,User,Payment,Email svc;
+```
+
 ## User Management API Testing
 
 The application exposes a JWT-based user management module under the `com.rehi.productservicedrehicapstone` package.
@@ -482,4 +510,9 @@ curl -X POST "http://YOUR_EC2_PUBLIC_IP:8080/api/users/profile/ai-bio" \
 ```
 
 The response will be a short, AI-generated bio string tailored to the provided interests.
+
+## Author
+
+- **Name**: drehi440  
+- **Email**: `rehi.deepesh@gmail.com`
 

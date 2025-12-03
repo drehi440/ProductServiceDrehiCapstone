@@ -34,7 +34,7 @@ This section provides ready-to-use examples for registering a user, logging in, 
 > Replace `localhost:8080` if your server is running on a different host or port.
 
 
-## 0. Design Decisions
+### 0. Design Decisions
 
 Here is a quick look at why I chose specific technologies for this architecture:
 

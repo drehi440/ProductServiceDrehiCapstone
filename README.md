@@ -308,3 +308,40 @@ curl -X GET "http://localhost:8080/api/orders/1/track"
 The response is an `OrderTrackingDto` with `orderId`, `status`, `orderDate`, and `estimatedDelivery`
 where `estimatedDelivery` is calculated as `orderDate + 3 days`.
 
+
+## Payment Module Testing
+
+The payment module processes payments for existing orders using different payment methods (UPI, Card, Net Banking).
+These calls should be made **after** an order has been created via the checkout flow.
+
+> Replace `localhost:8080`, `orderId`, and amounts as appropriate.
+
+### 1. Process Payment for an Order
+
+**Endpoint:** `POST /api/payments/process`  
+**Description:** Initiates payment for the given order and returns a receipt-like response.
+
+```bash
+curl -X POST "http://localhost:8080/api/payments/process" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "orderId": 1,
+    "paymentMethod": "UPI",
+    "amount": 499.99
+  }'
+```
+
+The response is a `PaymentResponseDto` containing `paymentId`, `status`, `transactionReference`, `amount`, and a timestamp.
+
+### 2. Verify Order Status After Payment
+
+**Endpoint:** `GET /api/orders/{orderId}`  
+**Description:** Confirms that the order’s `purchaseStatus` has been updated to `"CONFIRMED"` after successful payment.
+
+```bash
+curl -X GET "http://localhost:8080/api/orders/1"
+```
+
+Check that the returned `OrderResponseDto` includes `status` set to `"CONFIRMED"` and that payment details are present.
+

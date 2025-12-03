@@ -36,7 +36,8 @@ public class OrderResponseDto {
                 .status(order.getPurchaseStatus())
                 .totalAmount(order.getTotalAmount())
                 .orderItems(itemDtos)
-                .paymentDetails(PaymentDto.from(order.getPayment()))
+                // Payment is now looked up separately via PaymentRepository; not mapped on the entity.
+                .paymentDetails(null)
                 .build();
     }
 }

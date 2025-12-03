@@ -82,16 +82,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTotalAmount(totalAmount);
 
-        // Mock payment: mark as SUCCESS.
-        Payment payment = Payment.builder()
-                .paymentMethod(orderRequestDto.getPaymentMethod())
-                .transactionStatus("SUCCESS")
-                .totalAmount(totalAmount)
-                .order(order)
-                .build();
-
-        order.setPayment(payment);
-        order.setPurchaseStatus("COMPLETED");
+        // Initial order status before payment confirmation.
+        order.setPurchaseStatus("AWAITING_PAYMENT");
 
         Order savedOrder = orderRepository.save(order);
 
@@ -100,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         cart.setTotalPrice(0.0);
         cartRepository.save(cart);
 
-        log.info("Checkout completed for userId={}, orderId={}, totalAmount={}",
+        log.info("Checkout completed (awaiting payment) for userId={}, orderId={}, totalAmount={}",
                 userId, savedOrder.getOrderId(), totalAmount);
 
         return OrderResponseDto.from(savedOrder);

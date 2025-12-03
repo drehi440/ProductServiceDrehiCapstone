@@ -78,4 +78,17 @@ public class GlobalExceptionHandler
                 new ResponseEntity<>(errorDto, HttpStatus.UNAUTHORIZED);
         return responseEntity;
     }
+
+    @ExceptionHandler(PaymentFailedException.class)
+    public ResponseEntity<ErrorDto> handlePaymentFailedException(
+            PaymentFailedException paymentFailedException)
+    {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setStatus("Failure");
+        errorDto.setMessage(paymentFailedException.getMessage());
+
+        ResponseEntity<ErrorDto> responseEntity =
+                new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+        return responseEntity;
+    }
 }

@@ -17,15 +17,26 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
+    /**
+     * Logical link to the order this payment belongs to.
+     */
+    private Long orderId;
+
     private String paymentMethod;
 
     private String transactionStatus;
 
+    /**
+     * Mock URL representing a hosted payment page.
+     */
+    private String paymentLink;
+
     private Double totalAmount;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    /**
+     * Reference (UUID) provided by the payment system.
+     */
+    private String transactionReference;
 }
 
 

@@ -29,16 +29,13 @@ public class ProductController
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<ProductResponseDto> getProductById(
+    public ProductResponseDto getProductById(
             @PathVariable("id") long id) throws ProductNotFoundException {
 
         Product product = productService.getProductById(id);
         ProductResponseDto productResponseDto = ProductResponseDto.from(product);
 
-        ResponseEntity<ProductResponseDto> responseEntity =
-                new ResponseEntity<>(productResponseDto, HttpStatus.OK);
-
-        return responseEntity;
+        return productResponseDto;
     }
 
     @GetMapping("/products")
@@ -62,7 +59,7 @@ public class ProductController
 
     @PostMapping("/products")
     public ProductResponseDto createProduct(@RequestBody
-                                            CreateFakeStoreProductDto createFakeStoreProductDto)
+                                                CreateFakeStoreProductDto createFakeStoreProductDto)
     {
         Product product = productService.createProduct(
                 createFakeStoreProductDto.getName(),

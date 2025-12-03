@@ -25,8 +25,8 @@ public class FakeStoreProductService implements ProductService
     public Product getProductById(long id) throws ProductNotFoundException {
         FakeStoreProductDto fakeStoreProductDto =
                 restTemplate.getForObject(
-                        "https://fakestoreapi.com/products/" + id,
-                        FakeStoreProductDto.class);
+                "https://fakestoreapi.com/products/" + id,
+                FakeStoreProductDto.class);
 
         if(fakeStoreProductDto == null)
         {
@@ -68,11 +68,13 @@ public class FakeStoreProductService implements ProductService
         fakeStoreProductRequestDto.setImage(imageUrl);
         fakeStoreProductRequestDto.setCategory(category);
 
+
         FakeStoreProductDto fakeStoreProductDto = restTemplate.postForObject(
                 "https://fakestoreapi.com/products",
                 fakeStoreProductRequestDto,
                 FakeStoreProductDto.class);
 
-        return fakeStoreProductDto.toProduct();
+
+         return fakeStoreProductDto.toProduct();
     }
 }

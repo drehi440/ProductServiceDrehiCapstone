@@ -1,5 +1,6 @@
 package com.rehi.productservicedrehicapstone.dtos;
 
+
 import com.rehi.productservicedrehicapstone.models.Product;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,11 @@ public class ProductResponseDto
 
     public static ProductResponseDto from(Product product)
     {
+        if(product == null)
+        {
+            return null;
+        }
+
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setId(product.getId());
         productResponseDto.setName(product.getName());
@@ -26,7 +32,5 @@ public class ProductResponseDto
         productResponseDto.setCategory(product.getCategory().getName());
 
         return productResponseDto;
-
-
     }
 }

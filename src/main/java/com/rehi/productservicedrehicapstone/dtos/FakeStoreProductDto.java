@@ -11,9 +11,9 @@ public class FakeStoreProductDto
 {
     private long id;
     private String title;
-    private long price;
-    private String description;
+    private double price;
     private String category;
+    private String description;
     private String image;
 
     public Product toProduct()
@@ -25,13 +25,10 @@ public class FakeStoreProductDto
         product.setPrice(price);
         product.setImageUrl(image);
 
-
         Category category1 = new Category();
-        category1.setName("category1");
+        category1.setName(category);
 
         product.setCategory(category1);
-
         return product;
-
     }
 }

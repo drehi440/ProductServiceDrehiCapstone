@@ -1,12 +1,25 @@
 package com.rehi.productservicedrehicapstone.models;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class Category
+@Entity
+public class Category extends BaseModel
 {
-    private long id;
-    private String name;
+    private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
+
+    @OneToMany
+    private List<Product> featuredProducts;
 }

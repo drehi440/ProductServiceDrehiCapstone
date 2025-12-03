@@ -1,16 +1,21 @@
 package com.rehi.productservicedrehicapstone.models;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Product
+@Entity
+public class Product extends BaseModel
 {
-    private long id;
-    private String name;
+
+
     private String description;
     private String imageUrl;
     private double price;
+    @ManyToOne
     private Category category;
 }

@@ -39,4 +39,30 @@ public class GlobalExceptionHandler
         new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
         return responseEntity;
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleUserNotFoundException(
+            UserNotFoundException userNotFoundException)
+    {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setStatus("Failure");
+        errorDto.setMessage(userNotFoundException.getMessage());
+
+        ResponseEntity<ErrorDto> responseEntity =
+                new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+        return responseEntity;
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorDto> handleInvalidCredentialsException(
+            InvalidCredentialsException invalidCredentialsException)
+    {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setStatus("Failure");
+        errorDto.setMessage(invalidCredentialsException.getMessage());
+
+        ResponseEntity<ErrorDto> responseEntity =
+                new ResponseEntity<>(errorDto, HttpStatus.UNAUTHORIZED);
+        return responseEntity;
+    }
 }

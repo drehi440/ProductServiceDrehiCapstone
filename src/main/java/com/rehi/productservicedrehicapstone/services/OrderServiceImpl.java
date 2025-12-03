@@ -2,6 +2,7 @@ package com.rehi.productservicedrehicapstone.services;
 
 import com.rehi.productservicedrehicapstone.dtos.OrderRequestDto;
 import com.rehi.productservicedrehicapstone.dtos.OrderResponseDto;
+import com.rehi.productservicedrehicapstone.dtos.OrderTrackingDto;
 import com.rehi.productservicedrehicapstone.exceptions.ResourceNotFoundException;
 import com.rehi.productservicedrehicapstone.models.*;
 import com.rehi.productservicedrehicapstone.repositories.CartRepository;
@@ -10,6 +11,9 @@ import com.rehi.productservicedrehicapstone.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,6 +104,36 @@ public class OrderServiceImpl implements OrderService {
                 userId, savedOrder.getOrderId(), totalAmount);
 
         return OrderResponseDto.from(savedOrder);
+    }
+
+    /**
+     * Returns paginated order history for a user.
+     * TODO: Uncomment @Cacheable once Redis or a suitable cache is configured.
+     */
+    // @Cacheable(value = "userOrders", key = "#userId")
+    @Transactional(readOnly = true)
+    public Page<OrderResponseDto> getOrdersByUser(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findByUserId(userId, pageable);
+        return orders.map(OrderResponseDto::from);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderResponseDto getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + orderId));
+        return OrderResponseDto.from(order);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderTrackingDto trackOrderStatus(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id " + orderId));
+
+        LocalDate orderDate = order.getOrderDate();
+        LocalDate estimatedDelivery = orderDate != null ? orderDate.plusDays(3) : null;
+
+        return OrderTrackingDto.from(order, estimatedDelivery);
     }
 }
 

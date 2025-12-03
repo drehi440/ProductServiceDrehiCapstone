@@ -265,3 +265,46 @@ SELECT * FROM cart_item;
 
 After checkout, there should be no rows for the user’s cart.
 
+
+## Order History & Tracking
+
+The order history and tracking module lets you list all orders for a user, paginate through history, and track a single order.
+These examples assume you have already placed at least one order via the **Cart & Checkout Flow**.
+
+> Replace `localhost:8080` and IDs as appropriate.
+
+### 1. View Order History for a User
+
+**Endpoint:** `GET /api/users/{userId}/orders`  
+**Description:** Returns a paginated list of orders for a user.
+
+```bash
+curl -X GET "http://localhost:8080/api/users/1/orders?page=0&size=5"
+```
+
+The response is a Spring Data `Page` of `OrderResponseDto` objects containing basic order details,
+items, and payment information.
+
+### 2. Pagination Test (Next Page of Orders)
+
+**Endpoint:** `GET /api/users/{userId}/orders?page=1&size=5`  
+**Description:** Fetches the second page of the user’s order history.
+
+```bash
+curl -X GET "http://localhost:8080/api/users/1/orders?page=1&size=5"
+```
+
+Adjust `page` and `size` as needed to test pagination behavior.
+
+### 3. Track a Specific Order
+
+**Endpoint:** `GET /api/orders/{orderId}/track`  
+**Description:** Returns tracking information for a single order, including purchase status and an estimated delivery date.
+
+```bash
+curl -X GET "http://localhost:8080/api/orders/1/track"
+```
+
+The response is an `OrderTrackingDto` with `orderId`, `status`, `orderDate`, and `estimatedDelivery`
+where `estimatedDelivery` is calculated as `orderDate + 3 days`.
+

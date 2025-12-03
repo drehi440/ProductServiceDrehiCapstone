@@ -1,11 +1,11 @@
 package com.rehi.productservicedrehicapstone.services;
 
-
 import com.rehi.productservicedrehicapstone.exceptions.ProductNotFoundException;
 import com.rehi.productservicedrehicapstone.models.Category;
 import com.rehi.productservicedrehicapstone.models.Product;
 import com.rehi.productservicedrehicapstone.repositories.CategoryRepository;
 import com.rehi.productservicedrehicapstone.repositories.ProductRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class ProductDBService implements ProductService
     @Override
     public Product getProductById(long id) throws ProductNotFoundException
     {
-        Optional<Product> optionalProduct = productRepository.findByIdAndIsDeletedFalse(id);
+        Optional<Product> optionalProduct = productRepository.findById(id);
 
         if(optionalProduct.isEmpty())
         {
@@ -41,27 +41,7 @@ public class ProductDBService implements ProductService
     @Override
     public List<Product> getAllProducts()
     {
-        return productRepository.findByIsDeletedFalse();
-    }
-
-    public List<Product> searchProductsByName(String name)
-    {
-        return productRepository.findByNameContainingIgnoreCase(name);
-    }
-
-    public List<Product> getProductsByPriceRange(double minPrice, double maxPrice)
-    {
-        return productRepository.findByPriceBetween(minPrice, maxPrice);
-    }
-
-    public List<Product> getProductsByCategoryName(String categoryName)
-    {
-        return productRepository.findByCategory_NameIgnoreCase(categoryName);
-    }
-
-    public List<Product> getActiveProducts()
-    {
-        return productRepository.findByIsDeletedFalse();
+        return productRepository.findAll();
     }
 
     @Override
@@ -78,44 +58,6 @@ public class ProductDBService implements ProductService
 
         product.setCategory(categoryObj);
         return productRepository.save(product);
-    }
-
-    @Override
-    public Product updateProduct(long id, String name, String description, double price,
-                                 String imageUrl, String category) throws ProductNotFoundException
-    {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-
-        if(optionalProduct.isEmpty())
-        {
-            throw new ProductNotFoundException("Product with id " + id + " not found");
-        }
-
-        Product product = optionalProduct.get();
-        product.setName(name);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setImageUrl(imageUrl);
-
-        Category categoryObj = getCategoryFromDB(category);
-        product.setCategory(categoryObj);
-
-        return productRepository.save(product);
-    }
-
-    @Override
-    public void deleteProduct(long id) throws ProductNotFoundException
-    {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-
-        if(optionalProduct.isEmpty())
-        {
-            throw new ProductNotFoundException("Product with id " + id + " not found");
-        }
-
-        Product product = optionalProduct.get();
-        product.setDeleted(true);
-        productRepository.save(product);
     }
 
     private Category getCategoryFromDB(String name)

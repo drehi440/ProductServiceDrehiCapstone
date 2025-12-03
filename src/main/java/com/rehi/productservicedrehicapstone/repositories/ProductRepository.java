@@ -3,20 +3,18 @@ package com.rehi.productservicedrehicapstone.repositories;
 import com.rehi.productservicedrehicapstone.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
-
+import java.util.Optional;
 
 // JPARepository: 1st Argument: Table name;
 // 2nd Argument: Type of primary key of the Table
 public interface ProductRepository extends JpaRepository<Product, Long>
 {
-    List<Product> findByNameContainingIgnoreCase(String name);
+    Product save(Product product);
 
-    List<Product> findByPriceBetween(double minPrice, double maxPrice);
+    List<Product> findAll();
 
-    List<Product> findByCategory_NameIgnoreCase(String categoryName);
+    Optional<Product> findById(long id);
 
-    List<Product> findByIsDeletedFalse();
-
-    java.util.Optional<Product> findByIdAndIsDeletedFalse(long id);
 }

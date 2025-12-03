@@ -1,4 +1,4 @@
-package com.rehi.productservicedrehicapstone.dtos;
+package com.rehi.productservicedrehicapstone.integrations.fakestore;
 
 import com.rehi.productservicedrehicapstone.models.Category;
 import com.rehi.productservicedrehicapstone.models.Product;
@@ -7,8 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FakeStoreProductDto
-{
+public class FakeStoreProductDto {
+
     private long id;
     private String title;
     private double price;
@@ -16,8 +16,7 @@ public class FakeStoreProductDto
     private String description;
     private String image;
 
-    public Product toProduct()
-    {
+    public Product toProduct() {
         Product product = new Product();
         product.setProductId(id);
         product.setDescription(description);
@@ -25,10 +24,12 @@ public class FakeStoreProductDto
         product.setPrice(price);
         product.setImage(image);
 
-        Category category1 = new Category();
-        category1.setCategoryName(category);
+        Category categoryModel = new Category();
+        categoryModel.setCategoryName(category);
 
-        product.setCategory(category1);
+        product.setCategory(categoryModel);
         return product;
     }
 }
+
+

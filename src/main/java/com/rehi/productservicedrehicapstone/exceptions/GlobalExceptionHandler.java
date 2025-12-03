@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @ControllerAdvice
@@ -19,11 +18,7 @@ public class GlobalExceptionHandler
         errorDto.setStatus("Failure");
         errorDto.setMessage("NullPointer exception occurred");
 
-        ResponseEntity<ErrorDto> responseEntity = 
-        new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
-        return responseEntity;
-
-        //  return errorDto;
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
@@ -34,10 +29,7 @@ public class GlobalExceptionHandler
         errorDto.setStatus("Failure");
         errorDto.setMessage(productNotFoundException.getMessage());
 
-        // return errorDto;
-        ResponseEntity<ErrorDto> responseEntity = 
-        new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
-        return responseEntity;
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

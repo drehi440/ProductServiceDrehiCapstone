@@ -99,14 +99,11 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- Optional: Redis starter for caching user order history.
-             Uncomment and configure Redis if you want to enable @Cacheable in OrderServiceImpl. -->
-        <!--
+        <!-- Redis starter for caching and JWT blacklist (e.g. user order cache, token blacklist). -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        -->
     </dependencies>
 
     <build>

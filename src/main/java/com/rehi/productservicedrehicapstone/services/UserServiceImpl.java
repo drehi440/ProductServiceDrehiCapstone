@@ -59,7 +59,12 @@ public class UserServiceImpl implements UserService {
 
         user = userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String primaryRole = user.getRoles().stream()
+                .findFirst()
+                .map(Role::getRoleName)
+                .orElse("CUSTOMER");
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUserId(), primaryRole);
 
         return AuthResponseDto.builder()
                 .jwtToken(token)
@@ -84,7 +89,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + loginRequestDto.getEmail()));
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String primaryRole = user.getRoles().stream()
+                .findFirst()
+                .map(Role::getRoleName)
+                .orElse("CUSTOMER");
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUserId(), primaryRole);
 
         return AuthResponseDto.builder()
                 .jwtToken(token)

@@ -1,7 +1,9 @@
 package com.rehi.productservicedrehicapstone.controllers;
 
 import com.rehi.productservicedrehicapstone.dtos.*;
+import com.rehi.productservicedrehicapstone.services.AuthService;
 import com.rehi.productservicedrehicapstone.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> register(@RequestBody UserRegistrationDto registrationDto) {
@@ -40,6 +43,21 @@ public class AuthController {
         userService.resetPassword(email, passwordResetDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-}
 
+    /**
+     * POST /api/auth/logout
+     * Blacklists the current JWT so it cannot be used again.
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        String token = authHeader.substring(7);
+        log.info("Logging out current session");
+        authService.logout(token);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
 

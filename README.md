@@ -345,3 +345,45 @@ curl -X GET "http://localhost:8080/api/orders/1"
 
 Check that the returned `OrderResponseDto` includes `status` set to `"CONFIRMED"` and that payment details are present.
 
+
+## Authentication & Security Testing
+
+This section focuses on verifying that protected routes are secured by JWT and that logout correctly invalidates tokens.
+
+> Replace `localhost:8080` and `$TOKEN` with values from your environment.
+
+### 1. Test Protected Route Without Token
+
+**Endpoint:** `GET /api/orders`  
+**Description:** Accessing this endpoint without a Bearer token should result in 401/403.
+
+```bash
+curl -X GET "http://localhost:8080/api/orders"
+```
+
+You should receive an Unauthorized/Forbidden response, since `/api/orders/**` is protected.
+
+### 2. Perform Logout
+
+Use a valid token obtained from the login step:
+
+```bash
+TOKEN="PASTE_JWT_TOKEN_HERE"
+
+curl -X POST "http://localhost:8080/api/auth/logout" \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+The server will blacklist this token until its expiration time.
+
+### 3. Verify Logout (Token Reuse Should Fail)
+
+Try to access a protected endpoint again using the **same** token:
+
+```bash
+curl -X GET "http://localhost:8080/api/orders" \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+You should now receive a 401 Unauthorized response because the token has been blacklisted server-side.
+

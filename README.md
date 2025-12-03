@@ -117,4 +117,78 @@ curl -X POST "http://localhost:8080/api/auth/reset-password" \
 
 If the old password is incorrect, the API will return a 401 Unauthorized error with a helpful error message handled by the global exception handler.
 
+## Product Catalog API
+
+The product catalog module uses the real MySQL database via Spring Data JPA repositories.
+All endpoints are exposed under the `/api` base path.
+
+> Replace `localhost:8080` with your actual host/port if needed.
+
+### 1. Seed Dummy Category and Product
+
+If you prefer to seed data directly in MySQL using the existing schema from `V1__init.sql`
+(`category` and `product` tables with `id` and `name` columns), you can run:
+
+```sql
+INSERT INTO category (id, name, created_at, last_modified, is_deleted, description)
+VALUES (1,
+        'Electronics',
+        NOW(),
+        NOW(),
+        0,
+        'Electronics and gadgets');
+
+INSERT INTO product (id,
+                     name,
+                     created_at,
+                     last_modified,
+                     is_deleted,
+                     description,
+                     image_url,
+                     price,
+                     category_id)
+VALUES (1,
+        'Sample Phone',
+        NOW(),
+        NOW(),
+        0,
+        'A sample smartphone for testing.',
+        'https://example.com/images/phone.png',
+        499.99,
+        1);
+```
+
+Alternatively, you can insert similar rows via your favourite SQL client using the same column names.
+
+### 2. Search for a Product
+
+**Endpoint:** `GET /api/products?keyword=phone`  
+**Description:** Searches products by matching the keyword in the product name or description (case-insensitive).
+
+```bash
+curl -X GET "http://localhost:8080/api/products?keyword=phone&page=0&size=10"
+```
+
+The response is a Spring Data `Page` structure containing `content` (an array of `ProductResponseDto` objects)
+along with pagination metadata such as `totalElements`, `totalPages`, `number`, and `size`.
+
+### 3. Browse Products by Category
+
+**Endpoint:** `GET /api/categories/{categoryId}/products`  
+**Description:** Returns products for a specific category with pagination support.
+
+```bash
+curl -X GET "http://localhost:8080/api/categories/1/products?page=0&size=10"
+```
+
+### 4. Pagination Example for All Products
+
+**Endpoint:** `GET /api/products?page=0&size=5`  
+**Description:** Fetches a paginated list of all products.
+
+```bash
+curl -X GET "http://localhost:8080/api/products?page=0&size=5"
+```
+
+You can adjust the `page` and `size` parameters to implement infinite scrolling or traditional paged views in the frontend.
 

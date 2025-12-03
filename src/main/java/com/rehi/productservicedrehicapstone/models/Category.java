@@ -1,25 +1,36 @@
 package com.rehi.productservicedrehicapstone.models;
 
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-public class Category extends BaseModel
-{
-    private String description;
+public class Category {
 
-    @OneToMany(mappedBy = "category")
-    @Fetch(FetchMode.JOIN)
-    private List<Product> products;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long categoryId;
 
-//    @OneToMany
-//    private List<Product> featuredProducts;
+    /**
+     * Display name of the category shown in the browse menu.
+     */
+    @Column(name = "name")
+    private String categoryName;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference
+    @Builder.Default
+    private List<Product> products = new ArrayList<>();
 }
+

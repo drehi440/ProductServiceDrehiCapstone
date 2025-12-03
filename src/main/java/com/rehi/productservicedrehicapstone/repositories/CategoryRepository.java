@@ -1,15 +1,12 @@
 package com.rehi.productservicedrehicapstone.repositories;
 
 import com.rehi.productservicedrehicapstone.models.Category;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CategoryRepository extends JpaRepository<Category, Long>
-{
-    @EntityGraph(attributePaths = "products")
-    Optional<Category> findByName(String name);
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Category save(Category category);
+    Optional<Category> findByCategoryName(String categoryName);
 }
+

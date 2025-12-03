@@ -1,36 +1,51 @@
 package com.rehi.productservicedrehicapstone.dtos;
 
-
 import com.rehi.productservicedrehicapstone.models.Product;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class ProductResponseDto
-{
-    private long id;
-    private String name;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ProductResponseDto {
+
+    private Long productId;
+    private String productName;
+    private String image;
     private String description;
-    private String imageUrl;
-    private double price;
-    private String category;
+    private Integer quantity;
+    private Double price;
+    private Double discount;
+    private Double specialPrice;
+    private String categoryName;
 
-    public static ProductResponseDto from(Product product)
-    {
-        if(product == null)
-        {
+    /**
+     * Static mapper method to convert a Product entity into a DTO.
+     * Using DTOs avoids exposing JPA internals directly over the wire.
+     */
+    public static ProductResponseDto from(Product product) {
+        if (product == null) {
             return null;
         }
 
-        ProductResponseDto productResponseDto = new ProductResponseDto();
-        productResponseDto.setId(product.getId());
-        productResponseDto.setName(product.getName());
-        productResponseDto.setDescription(product.getDescription());
-        productResponseDto.setImageUrl(product.getImageUrl());
-        productResponseDto.setPrice(product.getPrice());
-        productResponseDto.setCategory(product.getCategory().getName());
+        String resolvedCategoryName = product.getCategory() != null
+                ? product.getCategory().getCategoryName()
+                : null;
 
-        return productResponseDto;
+        return ProductResponseDto.builder()
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .image(product.getImage())
+                .description(product.getDescription())
+                .quantity(product.getQuantity())
+                .price(product.getPrice())
+                .discount(product.getDiscount())
+                .specialPrice(product.getSpecialPrice())
+                .categoryName(resolvedCategoryName)
+                .build();
     }
 }
+

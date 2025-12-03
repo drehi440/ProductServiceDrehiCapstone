@@ -13,4 +13,5 @@ public interface ProductService
                           String imageUrl, String category);
     Product updateProduct(long id, String name, String description, double price,
                           String imageUrl, String category) throws ProductNotFoundException;
+    void deleteProduct(long id) throws ProductNotFoundException;
 }

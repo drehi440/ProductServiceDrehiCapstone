@@ -15,7 +15,7 @@ This section provides ready-to-use examples for registering a user, logging in, 
 curl -X POST "http://localhost:8080/api/auth/register" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "d,r@example.com",
+    "email": "d.r@example.com",
     "password": "StrongPassword123",
     "firstName": "D",
     "lastName": "R",
